@@ -2,12 +2,17 @@ execute "clean-up" do
   command "rm /home/vagrant/postinstall.sh || true"
 end
 
+cookbook_file "/deadsnakes-key" do
+  source "deadsnakes-key"
+  mode 0644
+end
+
 # deadsnakes for py2.6
 execute "deadsnakes key" do
-  command "sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys DB82666C"
+  command "sudo apt-key add /deadsnakes-key"
   action :run
-  not_if "sudo apt-key list | grep 'Launchpad Old Python Versions'"
 end
+
 
 cookbook_file "/etc/apt/sources.list.d/fkrull-deadsnakes-precise.list" do
   source "etc/apt/sources.list.d/fkrull-deadsnakes-precise.list"
